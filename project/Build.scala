@@ -8,7 +8,7 @@ object ApplicationBuild extends Build {
     val appVersion      = "0.2.1-FORK-SNAPSHOT"
 
   val appDependencies = Seq(
-    "spy" % "spymemcached" % "2.6",
+    "spy" % "spymemcached" % "2.8.4",
     "play" %% "play" % "2.0"
   )
 
