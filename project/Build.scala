@@ -4,16 +4,17 @@ import PlayProject._
 
 object ApplicationBuild extends Build {
 
-    val appName         = "play2-memcached"
-    val appVersion      = "0.2.1-SNAPSHOT"
+    val appName         = "play2-memcached-fork"
+    val appVersion      = "0.2.1-FORK-SNAPSHOT"
 
   val appDependencies = Seq(
     "spy" % "spymemcached" % "2.6",
-    "play" %% "play" % "2.1-SNAPSHOT"
+    "play" %% "play" % "2.0"
   )
 
   val main = PlayProject(appName, appVersion, appDependencies, mainLang = JAVA).settings(
-    organization := "com.github.mumoshu"
+    organization := "com.github.mumoshu",
+    resolvers += "Spy Repository" at "http://files.couchbase.com/maven2"
   )
 
  
