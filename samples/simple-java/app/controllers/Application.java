@@ -62,5 +62,4 @@ public class Application extends Controller {
             throw new RuntimeException("Could not get the cached value.");
         }
     }
-
 }
