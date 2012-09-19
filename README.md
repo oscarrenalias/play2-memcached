@@ -1,38 +1,33 @@
 Memcached Plugin for Play framework 2.0
 ---------------------------------------
 
-An implementation of CacheAPI for Play 2.0 final.
-Using spymemcached 2.6 internally, which is the same as Play 1.2.4.
+Memcache-based caching backend for Play 2.0.x, forked from https://github.com/mumoshu/play2-memcached.
+
+Using spymemcached 2.8 internally.
 
 ## Usage
 
-Add the following dependency to your Play project:
+The plugin is not provided via a Maven repository so it must be compiled and deployed to the Play 2.0.x application as a JAR file as an unmanaged dependency.
 
-```scala
-  val appDependencies = Seq(
-    "com.github.mumoshu" %% "play2-memcached" % "0.2.1-SNAPSHOT"
-  )
-  val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
-    resolvers += "Sonatype OSS Snapshots Repository" at "http://oss.sonatype.org/content/groups/public",
-    resolvers += "Spy Repository" at "http://files.couchbase.com/maven2" // required to resolve `spymemcached`, the plugin's dependency.
-  )
-```
+Use play package to build a JAR file and move target/scala-2.9.1/play2-memcached-fork_2.9.1-0.2.1-FORK-SNAPSHOT.jar to the lib/folder of your Play application.
 
-Add a reference to the plugin in `play.plugins` file.
-`play.plugins` file must be put somewhere in the classpath.
-My recommendation is to put it in `conf/` directory.
+Alternatively the module can be deployed to a Maven repository for improved dependency management.
+
+## Configuration
+
+Create file play.plugins and save it somewhere in the classpath (a good place would be the conf/ folder):
 
 ```
-  5000:com.github.mumoshu.play2.memcached.MemcachedPlugin
+5000:com.github.mumoshu.play2.memcached.MemcachedPlugin
 ```
 
-First of all, in `application.conf`, disable the EhCachePlugin - Play's default implementation of CacheAPI:
+In application.conf, disable the default Ehcache plugin for the cache:
 
 ```
   ehcacheplugin=disabled
 ```
 
-Specify the host name or IP address of the memcached server, and the port number:
+And configure the memcache host data, including the port number:
 
 ```
   memcached.host="127.0.0.1:11211"
@@ -45,7 +40,9 @@ If you have multiple memcached instances over different host names or IP address
   memcached.2.host="mumocached2:11211"
 ```
 
-Then, you can use the `play.api.cache.Cache` object to store a value in memcached:
+## Usage
+
+The `play.api.cache.Cache` object is used just like with the default implementation:
 
 ```scala
  Cache.set("key", "theValue")
@@ -89,8 +86,8 @@ To disable the plugin in `application.conf`:
 If you memcached requires the client an authentication with SASL, provide username/password like:
 
 ```
-  memcached.user=misaka
-  memcached.password=mikoto
+  memcached.user=user
+  memcached.password=password
 ```
 
 ### Configure logging
@@ -102,6 +99,16 @@ If you need to peek into what's going on, set the log level like:
   logger.memcached=DEBUG
 ```
 
-## Build status
+## Deploying to Heroku
 
-[![Build Status](https://secure.travis-ci.org/mumoshu/play2-memcached.png)](http://travis-ci.org/mumoshu/play2-memcached)
+Heroku provides a memcache service that seamlessly works with this plugin, 
+
+After enabling Heroku's memcache service for our application, the memcache server configuration should not be hardcoded but retrieved from the Heroku environment as follows:
+
+```
+ehcacheplugin=disabled
+memcachedplugin=enabled
+memcached.user=${MEMCACHE_USERNAME}
+memcached.password=${MEMCACHE_PASSWORD}
+memcached.host=${MEMCACHE_SERVERS}":11211"
+```
