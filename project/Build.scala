@@ -5,7 +5,7 @@ import PlayProject._
 object ApplicationBuild extends Build {
 
     val appName         = "play2-memcached-fork"
-    val appVersion      = "0.2.1-FORK-SNAPSHOT"
+    val appVersion      = "0.2.3-FORK-SNAPSHOT"
 
   val appDependencies = Seq(
     "spy" % "spymemcached" % "2.8.4",

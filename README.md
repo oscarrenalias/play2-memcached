@@ -14,6 +14,16 @@ Use play package to build a JAR file and move target/scala-2.9.1/play2-memcached
 Alternatively the module can be deployed to a Maven repository for improved dependency management.
 
 ## Configuration
+=======
+```scala
+  val appDependencies = Seq(
+    "com.github.mumoshu" %% "play2-memcached" % "0.2.3-SNAPSHOT"
+  )
+  val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
+    resolvers += "Sonatype OSS Snapshots Repository" at "http://oss.sonatype.org/content/groups/public",
+    resolvers += "Spy Repository" at "http://files.couchbase.com/maven2" // required to resolve `spymemcached`, the plugin's dependency.
+  )
+```
 
 Create file play.plugins and save it somewhere in the classpath (a good place would be the conf/ folder):
 
